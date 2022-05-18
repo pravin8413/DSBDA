@@ -1,0 +1,152 @@
+--------------------Linear Regression 1------------------
+
+#Reading Required Dataset
+from sklearn.datasets import load_boston
+boston = load_boston()
+boston
+#importing required LIbraries
+import pandas as pd
+import numpy as np
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+#creating Dataframe
+df_x = pd.DataFrame(boston.data, columns=boston.feature_names)
+df_y = pd.DataFrame(boston.target)
+df_x
+df_y
+df_x.describe()
+df_y.describe()
+df_x.shape
+df_x.columns
+#Initializing the linear regression Model
+reg = linear_model.LinearRegression()
+#spliting data into 70% trainnig and 30% testing
+x_train, x_test, y_train, y_test = train_test_split(df_x,df_y,test_size=0.3,random_state=42)
+#Train the model
+reg.fit(x_train, y_train)
+#print the coefficient/ weights for each feature/ column
+#f(x) = mx+c=y where m is the coefficient
+reg.coef_
+#Prediction
+y_pred = reg.predict(x_test)
+y_pred
+y_test
+print(np.mean((y_pred-y_test)**2))
+from sklearn.metrics import mean_squared_error
+print(mean_squared_error(y_test,y_pred))
+
+
+
+--------------------Data Analytics - logistic regression-------------
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+# Read csv into dataframe
+df = pd.read_csv('Social_Network_Ads.csv')
+df
+df.shape
+df.columns
+df.dtypes
+df.info()
+df.describe()
+x = df.iloc[:, [2,3]].values
+x
+y=df.iloc[:,4].values
+y
+# Spliting Data into 75% training and 25% testing data
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.25, random_state=0)
+x_train
+x_train.shape
+y_train
+y_train.shape
+x_test
+x_test.shape
+y_test
+y_test.shape
+#Data Standardization
+from sklearn.preprocessing import StandardScaler
+sc_x=StandardScaler()
+x_train = sc_x.fit_transform(x_train)
+x_test=sc_x.fit_transform(x_test)
+x_train
+#Initializing logistic Regression model and training the model
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(random_state=0)
+classifier.fit(x_train, y_train)
+#prediction
+y_pred = classifier.predict(x_test)
+y_pred
+y_test
+#confusion matrix
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(y_test,y_pred)
+cm
+#Calculating accuracy of model
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_test,y_pred)*100
+accuracy
+#True Positive : Actually True, Predicted True
+tp = cm[0,[0]]
+print("True Positive : ",tp)
+#False Positive : Actually False, Predicted True
+fp = cm[0,[1]]
+print("False Positive : ", fp)
+#False Negative : Actually True, Predicted False
+fn = cm[1,[0]]
+print("False Negative : ",fn)
+#True Negative : Actually False, Predicted False
+tn = cm[1,[1]]
+print("True Negative : ", tn)
+#Accuracy
+accuracy_cm = ((tp+tn)/(tp+fp+fn+tn))
+print("Accuracy : ", accuracy_cm*100)
+#Error Rate
+error_rate_cm = ((fp+fn)/(tp+fp+fn+tn))
+print("Error Rate : ", error_rate_cm*100)
+#precision
+precision_cm = (tp/(tp+fp))
+print("Precision : ", precision_cm*100)
+#Recall
+recall_cm = (tp/(tp+fn))
+print("Spensitivity : ", recall_cm*100)
+#Specificity
+specificity_cm = (tn/(tn+fp))
+print("Specificity : ", specificity_cm*100)
+
+
+
+
+
+
+Algorithm (Boston Dataset):
+Step 1:  Import libraries and create alias for Pandas, Numpy and Matplotlib
+import numpy as np import pandas as pd import matplotlib.pyplot as plt
+Step 2: Import the Boston Housing dataset
+from sklearn.datasets import load_boston boston = load_boston()
+Step 3: Initialize  the data frame
+data = pd.DataFrame(boston.data)
+Step 4: Add the feature names to the dataframe data.columns = boston.feature_names data.head()
+Step 5: Adding target variable to dataframe data['PRICE'] = boston.target
+Step 6: Perform Data Preprocessing( Check for missing values) data.isnull().sum()
+Step 7:  Split  dependent variable and independent variables
+x = data.drop(['PRICE'], axis = 1) y = data['PRICE']
+Step 8: splitting data to training and testing dataset.
+from sklearn.model_selection import train_test_split xtrain, xtest, ytrain, ytest =
+train_test_split(x, y, test_size =0.2,random_state = 0)
+Step 9: Use linear regression( Train the Machine ) to Create Model
+import sklearn
+from sklearn.linear_model import LinearRegression lm = LinearRegression() model=lm.fit(xtrain, ytrain)
+Step 10:  Predict the y_pred for all values of train_x and test_x
+ytrain_pred = lm.predict(xtrain) ytest_pred = lm.predict(xtest)
+Step 11:Evaluate the performance of Model for train_y and test_y df=pd.DataFrame(ytrain_pred,ytrain) df=pd.DataFrame(ytest_pred,ytest)
+Step 12: Calculate Mean Square Paper for train_y and test_y from sklearn.metrics import mean_squared_error, r2_score mse = mean_squared_error(ytest, ytest_pred) print(mse)
+mse = mean_squared_error(ytrain_pred,ytrain) print(mse) Output:
+33.44897999767638
+mse = mean_squared_error(ytest, ytest_pred) print(mse) Output:
+19.32647020358573
+Step 13: Plotting the linear regression model
+lt.scatter(ytrain ,ytrain_pred,c='blue',marker='o',label='Training data') plt.scatter(ytest,ytest_pred ,c='lightgreen',marker='s',label='Test data') plt.xlabel('True values') plt.ylabel('Predicted')
+plt.title("True value vs Predicted value") plt.legend(loc= 'upper left') #plt.hlines(y=0,xmin=0,xmax=50) plt.plot() plt.show()

@@ -1,0 +1,32 @@
+-----------------Central tendency ----------------
+
+import pandas as pd
+import numpy as np
+df=pd.read_csv("Iris.csv")
+df
+df.shape
+df.isnull().sum()
+df.dtypes
+df.info()
+df.drop(columns="Id", inplace=True)
+df.columns
+df.describe()
+# Calculation of Mean for each Feature
+np.mean(df['SepalLengthCm'])
+np.mean(df['SepalWidthCm'])
+np.mean(df['PetalLengthCm'])
+np.mean(df['PetalWidthCm'])
+np.mean(df)
+#Standard deviation
+np.std(df) 
+df.std()
+df.median()
+df.median()
+# Calculating minimum value
+np.min(df)
+#calculating maximum value
+np.max(df)
+# Calculating 2st quantile (50th percentile)
+df.quantile(0.50)
+# Calculating 3st quantile (75th percentile)
+df.quantile(0.75)

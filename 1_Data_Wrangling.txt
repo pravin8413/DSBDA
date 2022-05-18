@@ -1,0 +1,121 @@
+ ------------------Data Wrangling ---------------------
+
+import pandas as pd
+import numpy as np
+df = pd.read_csv("train.csv")
+df
+df.shape
+df.columns
+df.size
+df.dtypes
+df.isnull().sum()
+df.describe()
+df.info()
+df['Cabin'] = df['Cabin'].replace(to_replace=np.nan, value="unknown")
+df
+df['Age'] = df['Age'].interpolate()
+df
+df['Embarked'].fillna(method="ffill", inplace=True)
+df
+df.isnull().sum()
+df.dtypes
+df['Age'] = df['Age'].astype('int64')
+df.dtypes
+quantitative_data = pd.get_dummies(df["Sex"],prefix="Sex")
+quantitative_data
+df=df.join(quantitative_data)
+df
+df.drop(["Sex"], axis=1, inplace=True)
+df
+
+
+
+------------------------Data Wrangling 2 (Student perdormance)-----------------
+
+import pandas as pd
+import numpy as np
+df = pd.read_csv('StudentPerformance.csv')
+df
+df.shape
+df.isnull().sum()
+df.isnull()
+df['math_score'] = df['math_score'].interpolate()
+df
+df.isnull().sum()
+df['writing score'] = df['writing score'].fillna(method='ffill')
+df
+df.isnull().sum()
+df['placement score'] = df['placement score'].fillna(method='ffill')
+df
+df.isnull().sum()
+df['club join year'] = df['club join year'].replace(to_replace=np.nan, value='2018')
+df
+df.isnull().sum()
+df['placement offer count'] = df['placement offer count'].fillna('1')
+df
+df.isnull().sum()
+df.dtypes
+df['math_score'] = df['math_score'].astype('int64')
+df['reading score'] = df['reading score'].astype('int64')
+df['writing score'] = df['writing score'].astype('int64')
+df['placement score'] = df['placement score'].astype('int64')
+df['club join year'] = df['club join year'].astype('int64')
+df['placement offer count'] = df['placement offer count'].astype('int64')
+df.dtypes
+#check for outlier
+columns = ['math_score','reading score','writing score','placement score']
+df.boxplot(columns)
+np.where(df['math_score']<70)
+np.where(df['math_score']>80)
+np.where(df['reading score']<75)
+np.where(df['reading score']>95)
+np.where(df['writing score']<80)
+np.where(df['writing score']>80)
+np.where(df['placement score']<75)
+np.where(df['placement score']>100)
+np.where((df['placement score']<75) & (df['placement score']>1))
+np.where(((df['placement score']>75) & (df['placement score']<=85)) & 
+((df['placement offer count']>2) | (df['placement offer count']<4)))
+np.where((df['placement score']>85) & (df['placement offer count']<3))
+#Outlier detection
+df[(df['math_score']<65) | (df['math_score']>80)]
+df[(df['math_score']<75) | (df['reading score']>95)]
+df[(df['writing score']<65) | (df['writing score']>80)]
+df[(df['placement score']<75) | (df['placement score']>100)]
+df[(df['club join year']<2018) | (df['club join year']>2021)]
+df[(df['placement score']<75) | (df['placement offer count']>1)]
+df[((df['placement score']>75) & (df['placement score']<=85))
+   & ((df['placement offer count']>2) | (df['placement offer count']<2))]
+df[((df['placement score']>85) & (df['placement offer count']<3))]
+#Outlier Removal
+new_df1 = df[((df.math_score >=60) & (df.math_score<=80)) 
+            & ((df['reading score']>=75) & (df['reading score']<=90))
+            & ((df['writing score']>=60) & (df['writing score']<=80))
+            & ((df['placement score']>=75) & (df['placement score']<=100))
+            & ((df['club join year'] >=2018) & (df['club join year'] <=2021))]
+new_df1
+new_df1[(new_df1['placement score'] <75) &
+        (new_df1['placement offer count']<2)]
+
+new_df1[((new_df1['placement score']>=75) & (new_df1['placement score']<=80))
+       & ((new_df1['placement offer count']>2) | new_df1['placement offer count']<4)]
+new_df2 = new_df1[
+    ((new_df1['placement score']<75) & (new_df1['placement offer count']==1))
+    | ((new_df1['placement score']>=75) & (new_df1['placement score']<85))
+    | ((new_df1['placement score']>85) & (new_df1['placement offer count']==3))
+]
+new_df2
+new_df2.shape
+#check if the outlier are completely removed
+new_df2[(new_df2['math_score']<60) | (new_df2['math_score']>80)]
+new_df2[(new_df2['reading score']<60) | (new_df2['reading score']>95)]
+new_df2[(new_df2['writing score']<60) | (new_df2['writing score']>80)]
+new_df2[(new_df2['placement score']<75) | (new_df2['placement score']>100)]
+new_df2[(new_df2['club join year']<218) | (new_df2['club join year']>2021)]
+new_df2[(new_df2['placement score']<75) | (new_df2['placement offer count']>3)]
+#Data transformation and Normalization
+from sklearn.preprocessing import MinMaxScaler
+scaling = MinMaxScaler()
+scaling.fit_transform(new_df2[['math_score','reading score','writing score',
+'placement score']])
+
